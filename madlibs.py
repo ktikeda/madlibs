@@ -44,7 +44,7 @@ def greet_person():
 @app.route('/game')
 def play_game():
     """Start game madlibs"""
-    player = request.args.get("person")
+   
     option = request.args.get("is_playing")
     if option:
         return render_template("game.html")
@@ -54,12 +54,13 @@ def play_game():
 @app.route('/madlib')
 def show_madlib():
     """Display madlib from user input"""
-    noun = request.args.get("noun")
-    person = request.args.get("person")
-    color = request.args.get("color")
-    adj = request.args.get("adj")
+    words = {}
+    words["nouns"] = choice(request.args.get("noun").split())
+    words["person"] = request.args.get("person")
+    words["colors"] = choice(request.args.get("color").split())
+    words["adjs"] = choice(request.args.get("adj").split())
 
-    return render_template('madlib.html', m_noun=noun, m_person=person, m_color=color, m_adj=adj)
+    return render_template('madlib.html', m_words = words)
 
 
 if __name__ == '__main__':
