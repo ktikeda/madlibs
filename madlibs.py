@@ -1,6 +1,6 @@
 """A madlib game that compliments its users."""
 
-from random import choice
+from random import choice, sample
 
 from flask import Flask, render_template, request
 
@@ -35,11 +35,11 @@ def greet_person():
 
     player = request.args.get("person")
 
-    compliment = choice(AWESOMENESS)
+    compliments = sample(AWESOMENESS, 3)
 
     return render_template("compliment.html",
                            person=player,
-                           compliment=compliment)
+                           compliments=compliments)
 
 @app.route('/game')
 def play_game():
@@ -55,12 +55,22 @@ def play_game():
 def show_madlib():
     """Display madlib from user input"""
     words = {}
-    words["nouns"] = choice(request.args.get("noun").split())
+    words["nouns"] = request.args.get("noun").split()
     words["person"] = request.args.get("person")
-    words["colors"] = choice(request.args.get("color").split())
     words["adjs"] = choice(request.args.get("adj").split())
+    words["colors"] = choice(request.args.getlist("colors"))
 
-    return render_template('madlib.html', m_words = words)
+    # print words["colors"]
+    madlibs = ["madlib1.html", "madlib2.html", "madlib3.html"]
+
+    if len(words["nouns"]) == 2:
+        madlib = madlibs[0]
+    elif len(words["nouns"]) < 2:
+        madlib = madlibs[1]
+    else:
+        madlib = madlibs[2]
+
+    return render_template(madlib, m_words = words)
 
 
 if __name__ == '__main__':
