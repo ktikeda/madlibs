@@ -46,14 +46,20 @@ def play_game():
     """Start game madlibs"""
     player = request.args.get("person")
     option = request.args.get("is_playing")
-    option = bool(option)
-    print type(option)
-    print option
     if option:
         return render_template("game.html")
     else:
         return render_template("goodbye.html")
 
+@app.route('/madlib')
+def show_madlib():
+    """Display madlib from user input"""
+    noun = request.args.get("noun")
+    person = request.args.get("person")
+    color = request.args.get("color")
+    adj = request.args.get("adj")
+
+    return render_template('madlib.html', m_noun=noun, m_person=person, m_color=color, m_adj=adj)
 
 
 if __name__ == '__main__':
